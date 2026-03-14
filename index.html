@@ -1,111 +1,527 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Black Lion Command Center</title>
-<style>
-body {margin:0;font-family:'Courier New', monospace;background:#0b0c10;color:#00ffcc;}
-h1{text-align:center;margin:20px;color:#00ffcc;text-shadow:0 0 10px #00ffcc;}
-.container{max-width:900px;margin:20px auto;padding:20px;background:rgba(11,12,16,0.95);border-radius:15px;box-shadow:0 0 25px #00ffcc;}
-label{display:block;margin:10px 0 5px;font-weight:bold;}
-.checkbox-group{margin-bottom:15px;}
-.checkbox-group label{font-weight:normal;margin-left:8px;}
-.wa-btn{background:#25D366;color:#0b0c10;text-align:center;padding:15px;margin-top:10px;border-radius:10px;font-weight:bold;font-size:18px;text-decoration:none;display:block;text-shadow:0 0 5px #0b0c10;}
-.wa-btn:hover{background:#1ebe57;}
-footer{margin-top:30px;text-align:center;font-size:14px;color:#00ffcc;opacity:0.85;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fliarts Express Ltd · Real Estate KYC</title>
+    <!-- Poppins font for modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (free) for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(145deg, #eaeef4 0%, #f8fafc 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            animation: bgFade 2s ease-out;
+        }
+
+        @keyframes bgFade {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .kyc-card {
+            max-width: 1000px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 2.5rem;
+            box-shadow: 0 30px 60px -10px rgba(0, 20, 30, 0.25), 0 0 0 1px rgba(255,255,255,0.6) inset;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: cardRise 0.9s cubic-bezier(0.15, 0.85, 0.35, 1.05) forwards;
+            transform-origin: center;
+        }
+
+        @keyframes cardRise {
+            0% { opacity: 0; transform: scale(0.96) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* header with brand & contact */
+        .kyc-header {
+            background: #0b2b3c;
+            background-image: radial-gradient(circle at 20% 30%, #1a4757, #07212e);
+            padding: 1.8rem 2.5rem;
+            color: white;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #c7a96e;
+        }
+
+        .brand h1 {
+            font-weight: 600;
+            font-size: 2rem;
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            animation: slideIn 0.6s ease-out;
+        }
+        .brand span {
+            font-size: 0.95rem;
+            font-weight: 300;
+            color: #bfd7e3;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 5px;
+        }
+        .brand span i {
+            color: #c7a96e;
+        }
+
+        .contact-header {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            background: rgba(255,255,255,0.08);
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+            backdrop-filter: blur(4px);
+            animation: fadeInRight 0.7s 0.2s both;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+        .contact-item i {
+            color: #c7a96e;
+            font-size: 1.2rem;
+            width: 1.5rem;
+        }
+        .contact-item a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .contact-item a:hover {
+            color: #c7a96e;
+            text-decoration: underline;
+        }
+
+        /* main body with form and info */
+        .kyc-body {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+
+        .form-section {
+            flex: 2;
+            min-width: 320px;
+            padding: 2.5rem 2rem 2.5rem 2.5rem;
+            background: #ffffffd9;
+            backdrop-filter: blur(4px);
+        }
+
+        .info-section {
+            flex: 1;
+            min-width: 240px;
+            background: #f4f7fb;
+            padding: 2.5rem 2rem 2.5rem 2rem;
+            border-left: 1px dashed #b9ccdb;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .section-title {
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: #0b2b3c;
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .section-title i {
+            color: #c7a96e;
+            font-size: 1.8rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+            animation: inputPop 0.4s ease-out both;
+        }
+        .input-group:nth-child(1) { animation-delay: 0.1s; }
+        .input-group:nth-child(2) { animation-delay: 0.15s; }
+        .input-group:nth-child(3) { animation-delay: 0.2s; }
+        .input-group:nth-child(4) { animation-delay: 0.25s; }
+        .input-group:nth-child(5) { animation-delay: 0.3s; }
+        .input-group:nth-child(6) { animation-delay: 0.35s; }
+        .input-group:nth-child(7) { animation-delay: 0.4s; }
+
+        @keyframes inputPop {
+            0% { opacity: 0; transform: translateX(-10px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        .input-label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #1e3b4a;
+            margin-bottom: 0.4rem;
+        }
+        .input-label i {
+            color: #c7a96e;
+            font-size: 0.9rem;
+            width: 1.2rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border: 1.5px solid #dbe4ec;
+            border-radius: 18px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            background: white;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 6px rgba(0,30,40,0.02);
+        }
+        .input-field:focus {
+            border-color: #c7a96e;
+            outline: none;
+            box-shadow: 0 8px 18px -10px #c7a96e, 0 0 0 4px rgba(199,169,110,0.15);
+            transform: scale(1.01);
+        }
+        .input-field:hover {
+            border-color: #9f8a5c;
+        }
+
+        .double-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .double-row .input-group {
+            flex: 1 1 120px;
+        }
+
+        /* animated whatsapp button */
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 1.2rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            width: 100%;
+            margin-top: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 12px 28px -8px #25D36680;
+            border: 1px solid rgba(255,255,255,0.3);
+            animation: pulseGlow 2.5s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 12px 28px -8px #25D366; }
+            50% { box-shadow: 0 16px 40px -4px #25D366cc; transform: scale(1.02); }
+            100% { box-shadow: 0 12px 28px -8px #25D366; }
+        }
+
+        .whatsapp-btn i {
+            font-size: 1.8rem;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .whatsapp-btn:hover {
+            background: #20b859;
+            transform: scale(1.02) translateY(-2px);
+            box-shadow: 0 24px 40px -8px #1da959;
+        }
+
+        .info-block {
+            margin-bottom: 2.5rem;
+        }
+
+        .info-block h4 {
+            font-weight: 600;
+            color: #0b2b3c;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+        .info-block h4 i {
+            color: #c7a96e;
+        }
+
+        .info-block p {
+            color: #2e4b5a;
+            margin-bottom: 0.4rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .badge {
+            background: #0b2b3c;
+            color: white;
+            border-radius: 60px;
+            padding: 0.4rem 1.2rem;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin-top: 0.8rem;
+            border: 1px solid #c7a96e;
+        }
+
+        .footer-note {
+            border-top: 1px solid #cbdae6;
+            padding-top: 1.5rem;
+            margin-top: 1.2rem;
+            font-size: 0.8rem;
+            color: #4d6372;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .footer-note i {
+            color: #c7a96e;
+        }
+
+        /* subtle animations on info icons */
+        .pulse-icon {
+            animation: softPulse 2s infinite;
+        }
+        @keyframes softPulse {
+            0% { opacity: 0.9; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 0.9; transform: scale(1); }
+        }
+
+        /* Responsive */
+        @media (max-width: 720px) {
+            .kyc-header {
+                flex-direction: column;
+                align-items: start;
+                gap: 1rem;
+            }
+            .kyc-body {
+                flex-direction: column;
+            }
+            .info-section {
+                border-left: none;
+                border-top: 1px dashed #b9ccdb;
+            }
+            .form-section {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="kyc-card">
+        <!-- Header with company and live contact -->
+        <div class="kyc-header">
+            <div class="brand">
+                <h1>Fliarts Express Ltd</h1>
+                <span><i class="fas fa-building"></i> Real Estate · KYC verification</span>
+            </div>
+            <div class="contact-header">
+                <div class="contact-item">
+                    <i class="fab fa-whatsapp pulse-icon"></i>
+                    <a href="https://wa.me/23052599091" target="_blank">+230 5259 9091</a>
+                </div>
+                <div class="contact-item">
+                    <i class="far fa-envelope"></i>
+                    <a href="mailto:david.cheung@fliartsexpress.com">david.cheung@fliartsexpress.com</a>
+                </div>
+            </div>
+        </div>
 
-<h1>Black Lion Daily Tasks</h1>
+        <!-- Main body: KYC form + info sidebar -->
+        <div class="kyc-body">
+            <!-- LEFT: form section -->
+            <div class="form-section">
+                <div class="section-title">
+                    <i class="fas fa-user-check"></i>
+                    <span>Client KYC details</span>
+                </div>
 
-<div class="container">
-<label>Full Name</label>
-<input id="name" placeholder="Your full name">
+                <form id="kycForm">
+                    <!-- full name -->
+                    <div class="input-group">
+                        <div class="input-label"><i class="fas fa-user"></i> Full name (as per ID)</div>
+                        <input class="input-field" type="text" id="fullName" placeholder="e.g. Jean Michel Dupont" required>
+                    </div>
 
-<label>Student ID / Phone</label>
-<input id="id" placeholder="Your ID or phone">
+                    <!-- double line: email + phone -->
+                    <div class="double-row">
+                        <div class="input-group">
+                            <div class="input-label"><i class="fas fa-envelope"></i> Email</div>
+                            <input class="input-field" type="email" id="email" placeholder="client@domain.com" required>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-label"><i class="fas fa-phone-alt"></i> Phone</div>
+                            <input class="input-field" type="tel" id="phone" placeholder="+230 5XXX XXXX" required>
+                        </div>
+                    </div>
 
-<div class="checkbox-group">
-<h3>1️⃣ Physical Training (30+ mins)</h3>
-<input type="checkbox" id="task1_done"> <label for="task1_done">Completed</label>
-<input type="text" id="task1_note" placeholder="Optional note">
-</div>
+                    <!-- address -->
+                    <div class="input-group">
+                        <div class="input-label"><i class="fas fa-map-pin"></i> Residential / Business address</div>
+                        <input class="input-field" type="text" id="address" placeholder="Street, city, country" required>
+                    </div>
 
-<div class="checkbox-group">
-<h3>2️⃣ Mind Discipline</h3>
-<input type="checkbox" id="task2_done"> <label for="task2_done">Eye Gazing + Affirmation done</label>
-<input type="text" id="task2_note" placeholder="Optional note">
-</div>
+                    <!-- id type and number -->
+                    <div class="double-row">
+                        <div class="input-group">
+                            <div class="input-label"><i class="fas fa-id-card"></i> ID type</div>
+                            <select class="input-field" id="idType">
+                                <option value="Passport">Passport</option>
+                                <option value="National ID">National ID Card</option>
+                                <option value="Driver License">Driver License</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <div class="input-label"><i class="fas fa-hashtag"></i> ID number</div>
+                            <input class="input-field" type="text" id="idNumber" placeholder="e.g. P1234567" required>
+                        </div>
+                    </div>
 
-<div class="checkbox-group">
-<h3>3️⃣ Breath Ritual</h3>
-<input type="checkbox" id="task3_done"> <label for="task3_done">10 deep breaths with visualization</label>
-<input type="text" id="task3_note" placeholder="Optional note">
-</div>
+                    <!-- property of interest (optional but professional) -->
+                    <div class="input-group">
+                        <div class="input-label"><i class="fas fa-home"></i> Property of interest (optional)</div>
+                        <input class="input-field" type="text" id="property" placeholder="e.g. Villa Tamarin, or lot reference">
+                    </div>
 
-<div class="checkbox-group">
-<h3>4️⃣ Aura Protection</h3>
-<input type="checkbox" id="task4_done"> <label for="task4_done">Mantra completed</label>
-<input type="text" id="task4_note" placeholder="Optional note">
-</div>
+                    <!-- animated whatsapp button -->
+                    <button type="button" class="whatsapp-btn" id="sendViaWhatsApp">
+                        <i class="fab fa-whatsapp"></i> Send details via WhatsApp
+                    </button>
+                    <p style="font-size: 0.7rem; margin-top: 0.7rem; color: #4f6b7a;"><i class="fas fa-lock" style="opacity: 0.6;"></i> Your details will be securely sent to our KYC officer David Cheung</p>
+                </form>
+            </div>
 
-<div class="checkbox-group">
-<h3>5️⃣ Midnight Reflection</h3>
-<input type="checkbox" id="task5_done"> <label for="task5_done">Reflection done</label>
-<input type="text" id="task5_note" placeholder="Optional note">
-</div>
+            <!-- RIGHT: info panel (professional hints) -->
+            <div class="info-section">
+                <div class="info-block">
+                    <h4><i class="fas fa-shield-alt"></i> Why KYC?</h4>
+                    <p>We verify identity to ensure secure real estate transactions and comply with anti‑money laundering regulations.</p>
+                    <div class="badge"><i class="fab fa-whatsapp"></i> Direct to David Cheung</div>
+                </div>
 
-<div class="checkbox-group">
-<h3>6️⃣ Mental Fuel (10+ mins)</h3>
-<input type="checkbox" id="task6_done"> <label for="task6_done">Read / Watch activity done</label>
-<input type="text" id="task6_note" placeholder="Optional note">
-</div>
+                <div class="info-block">
+                    <h4><i class="fas fa-clock"></i> Instant processing</h4>
+                    <p>Once you send the details via WhatsApp, our agent will confirm within minutes.</p>
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem; font-size: 0.9rem;">
+                        <span><i class="fas fa-check-circle" style="color: #c7a96e;"></i> Encrypted</span>
+                        <span><i class="fas fa-check-circle" style="color: #c7a96e;"></i> Confidential</span>
+                    </div>
+                </div>
 
-<a href="#" id="waLink" class="wa-btn">Send Report to WhatsApp</a>
-</div>
+                <!-- contact person card with animation -->
+                <div style="background: #ffffffb3; border-radius: 28px; padding: 1.2rem; box-shadow: 0 8px 16px -10px #0b2b3c; margin-top: 1rem; border: 1px solid #ffffff; backdrop-filter: blur(2px); transition: all 0.2s;">
+                    <div style="display: flex; align-items: center; gap: 0.8rem;">
+                        <i class="fas fa-user-tie" style="font-size: 2rem; color: #0b2b3c;"></i>
+                        <div>
+                            <div style="font-weight: 600;">David Cheung</div>
+                            <div style="font-size: 0.8rem; color: #2b5a6e;">KYC / Compliance Officer</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 0.6rem; display: flex; flex-direction: column; gap: 0.2rem; font-size: 0.85rem;">
+                        <span><i class="fab fa-whatsapp" style="color: #25D366;"></i> +230 5259 9091</span>
+                        <span><i class="far fa-envelope" style="color: #0b2b3c;"></i> david.cheung@fliartsexpress.com</span>
+                    </div>
+                </div>
 
-<footer>
-    <p><strong>Mandatory:</strong> All reposts, likes, comments, and SharePoint activity must be documented and sent to the admin via WhatsApp as proof.</p>
-</footer>
+                <div class="footer-note">
+                    <i class="fas fa-globe"></i> Fliarts Express Ltd · Real Estate division
+                </div>
+            </div>
+        </div>
+    </div>
 
-<script>
-const waBtn = document.getElementById("waLink");
-const WA_GROUP_LINK = "https://chat.whatsapp.com/JcU2LJ93jK38jKlGFM5BC6?mode=wwt";
+    <!-- JavaScript to assemble WhatsApp message with form data -->
+    <script>
+        (function() {
+            const waButton = document.getElementById('sendViaWhatsApp');
+            const form = document.getElementById('kycForm');
 
-function updateWhatsAppLink(){
-    const name = document.getElementById("name").value || "N/A";
-    const id = document.getElementById("id").value || "N/A";
-    
-    const msg = `
-Black Lion Daily Report
-Name: ${name}
-ID: ${id}
+            // Collect field values and build message
+            function buildWhatsAppMessage() {
+                const fullName = document.getElementById('fullName').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const address = document.getElementById('address').value.trim();
+                const idType = document.getElementById('idType').value;
+                const idNumber = document.getElementById('idNumber').value.trim();
+                const property = document.getElementById('property').value.trim();
 
-1️⃣ Physical Training: ${document.getElementById("task1_done").checked ? "✅" : "❌"} ${document.getElementById("task1_note").value || ""}
-2️⃣ Mind Discipline: ${document.getElementById("task2_done").checked ? "✅" : "❌"} ${document.getElementById("task2_note").value || ""}
-3️⃣ Breath Ritual: ${document.getElementById("task3_done").checked ? "✅" : "❌"} ${document.getElementById("task3_note").value || ""}
-4️⃣ Aura Protection: ${document.getElementById("task4_done").checked ? "✅" : "❌"} ${document.getElementById("task4_note").value || ""}
-5️⃣ Midnight Reflection: ${document.getElementById("task5_done").checked ? "✅" : "❌"} ${document.getElementById("task5_note").value || ""}
-6️⃣ Mental Fuel: ${document.getElementById("task6_done").checked ? "✅" : "❌"} ${document.getElementById("task6_note").value || ""}
+                // Basic validation – but we let user know if fields are empty (optional)
+                if (!fullName || !email || !phone || !address || !idNumber) {
+                    alert('Please fill in all required fields (Name, Email, Phone, Address, ID number) before sending.');
+                    return null;
+                }
 
-Mandatory: All reposts, likes, comments, and SharePoint activity must be documented and sent to the admin via WhatsApp as proof.
-    `;
-    
-    const encoded = encodeURIComponent(msg);
-    waBtn.href = `https://wa.me/?text=${encoded}`;
-}
+                // Construct the message (professional formatting)
+                let message = `*Real Estate KYC - Fliarts Express Ltd*%0A`;
+                message += `-----------------------------%0A`;
+                message += `👤 *Full Name:* ${fullName}%0A`;
+                message += `📧 *Email:* ${email}%0A`;
+                message += `📞 *Phone:* ${phone}%0A`;
+                message += `🏠 *Address:* ${address}%0A`;
+                message += `🆔 *ID Type:* ${idType}%0A`;
+                message += `🔢 *ID Number:* ${idNumber}%0A`;
+                if (property) {
+                    message += `🏡 *Property of interest:* ${property}%0A`;
+                }
+                message += `-----------------------------%0A`;
+                message += `_Sent from professional KYC web form_`;
 
-// Update link dynamically
-document.querySelectorAll("input").forEach(el=>{
-    el.addEventListener("input", updateWhatsAppLink);
-    el.addEventListener("change", updateWhatsAppLink);
-});
+                return message;
+            }
 
-// Initialize
-updateWhatsAppLink();
-</script>
+            waButton.addEventListener('click', function() {
+                const message = buildWhatsAppMessage();
+                if (!message) return; // validation failed
 
+                // WhatsApp number (without +)
+                const waNumber = '23052599091'; 
+                const waUrl = `https://wa.me/${waNumber}?text=${message}`;
+
+                // Open WhatsApp in new tab/window
+                window.open(waUrl, '_blank');
+            });
+
+            // Optional: pressing Enter in any field doesn't accidentally submit (no actual form submit)
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // you could also trigger the whatsapp, but we use button click
+            });
+        })();
+    </script>
+    <!-- subtle extra animation on icons (just for delight) -->
 </body>
 </html>
