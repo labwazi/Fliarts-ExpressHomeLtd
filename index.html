@@ -286,12 +286,12 @@
                     <input class="input-field" id="property" value="Villa Tamarin">
                 </div>
 
-                <!-- ACTION BUTTONS: generate PDF and WhatsApp -->
+                <!-- ACTION BUTTONS: generate PDF and WhatsApp (now with full details) -->
                 <div class="action-buttons">
                     <button class="btn-primary" id="generatePdfBtn"><i class="fas fa-file-pdf"></i> Generate KYC PDF (with images)</button>
-                    <button class="btn-wa" id="whatsappBtn"><i class="fab fa-whatsapp"></i> Open WhatsApp & attach PDF</button>
+                    <button class="btn-wa" id="whatsappBtn"><i class="fab fa-whatsapp"></i> Send full details via WhatsApp</button>
                 </div>
-                <p style="font-size:0.7rem; color:#4f6b7a;"><i class="fas fa-lock"></i> PDF includes all details + uploaded documents. Download it, then attach in WhatsApp.</p>
+                <p style="font-size:0.7rem; color:#4f6b7a;"><i class="fas fa-lock"></i> PDF includes all details + uploaded images. Then attach PDF to WhatsApp.</p>
             </div>
 
             <!-- INFO SIDEBAR -->
@@ -303,7 +303,7 @@
                 </div>
                 <div class="info-block">
                     <h4><i class="fas fa-file-pdf"></i> PDF workflow</h4>
-                    <p>1. Fill form & upload docs.<br>2. Click "Generate PDF".<br>3. Download PDF.<br>4. Click WhatsApp, attach PDF and send.</p>
+                    <p>1. Fill form & upload docs.<br>2. Click "Generate PDF".<br>3. Download PDF.<br>4. Click WhatsApp (details auto-filled), attach PDF and send.</p>
                 </div>
                 <div style="background:#ffffffb3; border-radius:28px; padding:1.2rem; border:1px solid white;">
                     <div style="display:flex; gap:0.8rem;"><i class="fas fa-user-tie" style="font-size:2rem; color:#0b2b3c;"></i>
@@ -317,7 +317,7 @@
 
     <script>
         (function() {
-            // Display selected file names (basic UX)
+            // Display selected file names
             function updateFileName(inputId, displayId) {
                 const input = document.getElementById(inputId);
                 const display = document.getElementById(displayId);
@@ -334,7 +334,7 @@
             updateFileName('payslipFile', 'payslipFileName');
             updateFileName('residenceFile', 'residenceFileName');
 
-            // Helper to read file as data URL (for images) or for PDF we keep as base64
+            // Helper to read file as data URL
             function readFileAsDataURL(file) {
                 return new Promise((resolve, reject) => {
                     const reader = new FileReader();
@@ -344,7 +344,7 @@
                 });
             }
 
-            // Main PDF generation
+            // PDF generation (unchanged, works)
             document.getElementById('generatePdfBtn').addEventListener('click', async function() {
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: 'a4' });
@@ -353,7 +353,6 @@
                 const margin = 30;
                 let y = margin + 10;
 
-                // Helper to add text with line wrapping
                 function addText(text, fontSize = 12, isBold = false) {
                     pdf.setFontSize(fontSize);
                     pdf.setFont('helvetica', isBold ? 'bold' : 'normal');
@@ -368,14 +367,12 @@
                     });
                 }
 
-                // Title
                 pdf.setFontSize(18);
                 pdf.setFont('helvetica', 'bold');
-                pdf.setTextColor(11, 43, 60); // #0b2b3c
+                pdf.setTextColor(11, 43, 60);
                 pdf.text('Fliarts Express Ltd - KYC Summary', margin, y);
                 y += 25;
 
-                // Collect form values
                 const fullName = document.getElementById('fullName').value || '—';
                 const email = document.getElementById('email').value || '—';
                 const phone = document.getElementById('phone').value || '—';
@@ -385,7 +382,6 @@
                 const sourceFunds = document.getElementById('sourceFunds').value;
                 const property = document.getElementById('property').value || '—';
 
-                // Personal details block
                 pdf.setFillColor(240, 245, 250);
                 pdf.rect(margin-5, y-15, pageWidth-2*margin+10, 130, 'F');
                 pdf.setTextColor(0,0,0);
@@ -398,7 +394,6 @@
                 addText(`Property of interest: ${property}`);
                 y += 10;
 
-                // Documents section
                 addText('Uploaded documents:', 14, true);
                 const fileInputs = [
                     { id: 'nicFile', label: 'NIC' },
@@ -423,17 +418,13 @@
                     }
                 }
                 y += 15;
-
-                // Add a note
                 addText('--- Document images on following pages ---', 11, true);
-                y = pageHeight - 10; // force page break
+                y = pageHeight - 10;
 
-                // Now process each image file and add as image in PDF
                 for (let f of files) {
-                    if (!f.file.type.startsWith('image/')) continue; // skip non-images (can't embed PDFs easily)
+                    if (!f.file.type.startsWith('image/')) continue;
                     try {
                         const dataUrl = await readFileAsDataURL(f.file);
-                        // new page for each image
                         pdf.addPage();
                         y = margin + 10;
                         pdf.setFontSize(14);
@@ -441,7 +432,6 @@
                         pdf.text(`${f.label} - ${f.file.name}`, margin, y);
                         y += 20;
 
-                        // Load image to get dimensions
                         const img = new Image();
                         await new Promise((resolve, reject) => {
                             img.onload = resolve;
@@ -473,20 +463,53 @@
                     }
                 }
 
-                // Save PDF
                 pdf.save(`KYC_Fliarts_${fullName.replace(/\s/g,'_')}.pdf`);
             });
 
-            // WhatsApp button: just open wa.me with reminder to attach PDF
+            // UPDATED WHATSAPP BUTTON: sends full details as text, then user attaches PDF manually
             document.getElementById('whatsappBtn').addEventListener('click', function() {
-                const name = document.getElementById('fullName').value || 'client';
-                const message = `Hello David Cheung (Fliarts Express), I have completed the KYC form and generated the PDF with my documents. I am attaching it to this message. Please confirm receipt.%0A%0A_Regards, ${name}_`;
+                // Collect all fields
+                const fullName = document.getElementById('fullName').value.trim() || 'Not provided';
+                const email = document.getElementById('email').value.trim() || 'Not provided';
+                const phone = document.getElementById('phone').value.trim() || 'Not provided';
+                const address = document.getElementById('address').value.trim() || 'Not provided';
+                const idType = document.getElementById('idType').value;
+                const idNumber = document.getElementById('idNumber').value.trim() || 'Not provided';
+                const sourceFunds = document.getElementById('sourceFunds').value;
+                const property = document.getElementById('property').value.trim() || 'Not provided';
+
+                // Get uploaded file names
+                const nicFile = document.getElementById('nicFile').files[0];
+                const poaFile = document.getElementById('poaFile').files[0];
+                const payslipFile = document.getElementById('payslipFile').files[0];
+                const residenceFile = document.getElementById('residenceFile').files[0];
+
+                let fileList = '';
+                fileList += nicFile ? `• NIC: ${nicFile.name}\n` : '';
+                fileList += poaFile ? `• POA: ${poaFile.name}\n` : '';
+                fileList += payslipFile ? `• Payslip: ${payslipFile.name}\n` : '';
+                fileList += residenceFile ? `• Residence permit: ${residenceFile.name}\n` : '';
+                if (fileList === '') fileList = 'No documents attached';
+
+                // Build the message
+                let message = `*Real Estate KYC - Fliarts Express Ltd*%0A`;
+                message += `-----------------------------%0A`;
+                message += `👤 *Full Name:* ${fullName}%0A`;
+                message += `📧 *Email:* ${email}%0A`;
+                message += `📞 *Phone:* ${phone}%0A`;
+                message += `🏠 *Address:* ${address}%0A`;
+                message += `🆔 *ID Type:* ${idType}%0A`;
+                message += `🔢 *ID Number:* ${idNumber}%0A`;
+                message += `💰 *Source of Funds:* ${sourceFunds}%0A`;
+                message += `🏡 *Property of interest:* ${property}%0A`;
+                message += `📎 *Uploaded documents:*%0A${fileList.replace(/\n/g, '%0A')}%0A`;
+                message += `-----------------------------%0A`;
+                message += `_KYC PDF is attached to this message. Please confirm receipt._%0A`;
+                message += `_Regards, ${fullName}_`;
+
                 const waNumber = '23052599091';
                 window.open(`https://wa.me/${waNumber}?text=${message}`, '_blank');
             });
-
-            // Optional: old whatsapp direct from original requirement? but we replaced with new style.
-            // (the old button is removed; now we have two separate)
         })();
     </script>
 </body>
